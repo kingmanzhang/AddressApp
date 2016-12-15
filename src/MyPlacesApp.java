@@ -59,7 +59,6 @@ public class MyPlacesApp {
 			System.out.println("\nMy Places 2016");
 			places.printPlaces();  //list all places in My Places 2016
 			menu = menuList(places.size()); //list a menu for users to choose
-			//let user choose an action
 			actionChoice = scnr.nextLine().toLowerCase(); 
 			//if user chooses a wrong action, let user press enter to choose again
 			if (!checkInput(menu, actionChoice)) {
