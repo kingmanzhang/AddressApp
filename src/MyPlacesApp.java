@@ -107,6 +107,10 @@ public class MyPlacesApp {
 							setCurrent(places, scnr);
 							break;
 						}
+						case "p": { //if user types in "p" or "P", let user preview
+							         //places in a file
+							previewList(places, scnr, FILE_EXTENSION, DATA_PATH);
+						}
 					}
 				}
 		}while(!quit);
@@ -125,12 +129,12 @@ public class MyPlacesApp {
 		String[] str;
 		//if there is no place in my place list, display the following menu
 		if(numPlaces == 0) { 
-			System.out.print("A)dd R)ead Q)uit: ");
-			str = new String[]{"a", "r", "q"};
+			System.out.print("P)review A)dd R)ead Q)uit: ");
+			str = new String[]{"p", "a", "r", "q"};
 	   //otherwise, display another menu
 		} else {
-			System.out.print("A)dd S)how D)elete C)urrent R)ead W)rite Q)uit: ");
-			str = new String[]{"a", "s", "d", "c", "r","w", "q"};
+			System.out.print("P)review A)dd S)how D)elete C)urrent R)ead W)rite Q)uit: ");
+			str = new String[]{"p","a", "s", "d", "c", "r","w", "q"};
 		}
 		return str;
 	}
@@ -259,7 +263,11 @@ public class MyPlacesApp {
 			writePlaces(places, scnr);
 		}
 	}
-	
+	 /**
+	  * A method to set the current place.
+	  * @param places: a place to be set as current address
+	  * @param scnr: a scanner for user input
+	  */
 	public static void setCurrent(PlaceList places, Scanner scnr) {
 		System.out.print("Enter number of place to be Current place: ");
 		try {
@@ -272,6 +280,18 @@ public class MyPlacesApp {
 			scnr.nextLine();
 			enterKeyPressed(scnr);//let user press enter to complete the action
 		}
+	}
+	
+	public static PlaceList previewList(PlaceList places, Scanner scnr, String file_extension, String data_path) {
+		fileList(file_extension, data_path);//list all files with default extension 
+		PlaceList newPlaces = new PlaceList();
+		String filename = readInPlace(newPlaces, scnr);
+		if(newPlaces.size() > 0) {
+			System.out.println("\nPlaces in " + filename);
+			newPlaces.printPlaces();
+			System.out.println("Use R)ead to import to current place list");
+		}
+		return newPlaces;
 	}
 
 	/**
@@ -308,19 +328,23 @@ public class MyPlacesApp {
 	
 	/**
 	 * A method to print out all files with a specified extension in a folder.
-	 * @param FILE_EXTENSION: the file extension to check
-	 * @param DATA_PATH: folder to check
+	 * @param file_extension: the file extension to check
+	 * @param data_path: folder to check
 	 */
 
-	public static void fileList(String FILE_EXTENSION, String DATA_PATH) {
-		File folder = new File(DATA_PATH);//open a folder in the specified path
+	public static void fileList(String file_extension, String data_path) {
+		try {
+		File folder = new File(data_path);//open a folder in the specified path
 		System.out.println("My Places Files: ");
 		for (File file: folder.listFiles()) { //print out all files
-			if (file.getName().endsWith(FILE_EXTENSION)) {
+			if (file.getName().endsWith(file_extension)) {
 				System.out.println("    " + file.getName());
 			}
 		}
 		System.out.println("");
+		} catch (NullPointerException e) {
+			System.out.println("You must give a file extension");
+		}
 	}
 	
 	/**
@@ -328,7 +352,7 @@ public class MyPlacesApp {
 	 * @param places: a list of places
 	 * @param scnr: a scanner to deal with user input
 	 */
-	public static void readInPlace(PlaceList places, Scanner scnr) {
+	public static String readInPlace(PlaceList places, Scanner scnr) {
 		System.out.print("Enter filename: ");
 		String filename = scnr.next(); //let user type in file name
 		scnr.nextLine();
@@ -344,6 +368,7 @@ public class MyPlacesApp {
 		} finally {
 			enterKeyPressed(scnr);//let user press enter to complete the action
 		}	
+		return filename;
 	}
 	/**
 	 * A method to parse text and add to places
