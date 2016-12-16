@@ -30,8 +30,8 @@ import java.util.ArrayList;
 
 
 /**
- * The Place class is responsible for creating places. A place has two fields, name 
- * and address. 
+ * The Place class is responsible for creating places. A place has two fields, 
+ * name and address. 
  * @author Xingmin Zhang
  *
  */
@@ -104,8 +104,8 @@ public class Place implements Comparable<Place> {
 	}
 	
 	/**
-	 * A method to compare two places. The method overrides the equals() method of the
-	 * Object class.  
+	 * A method to compare two places. The method overrides the equals() method 
+	 * of the Object class.  
 	 * @return true if two places have the same name. 
 	 */
 	@Override
@@ -114,8 +114,8 @@ public class Place implements Comparable<Place> {
 		//The method should take in a place object
 		if(obj instanceof Place) {
 			Place newPlace = (Place) obj;
-			//if two places have the same name (case insensitive), they are regarded as 
-			//the same place.
+			//if two places have the same name (case insensitive), they are 
+			//regarded as the same place.
 			if (newPlace.name.toLowerCase().equals(newPlace.name.toLowerCase())) {
 				isEqual = true;
 			}

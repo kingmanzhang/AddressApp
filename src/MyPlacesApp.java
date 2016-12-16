@@ -52,8 +52,8 @@ public class MyPlacesApp {
 		String actionChoice; 
 		//keep track of items in the menu
 		String[] menu; 
-		String FILE_EXTENSION = "mpl";
-		String DATA_PATH = "./";
+		final String FILE_EXTENSION = "mpl";
+		final String DATA_PATH = "./";
 		//repeatedly ask users to choose actions until user chooses to quit.
 		do {
 			System.out.println("\nMy Places 2016");
@@ -88,18 +88,20 @@ public class MyPlacesApp {
 							deletePlace(places, scnr);
 							break;
 						}
-						case "r": { //if user types in "r" or "R", read places from 
-							         //a file
-							fileList(FILE_EXTENSION, DATA_PATH);//list all files with a "mp" 
-							                      //extension in the default directory
-							readInPlace(places, scnr); //add places from a file
+						case "r": { 
+							//if user types in "r" or "R", first list all files with 
+							//the default "mpl" extension in the default directory 
+							//(current folder), and then read in places from files
+							fileList(FILE_EXTENSION, DATA_PATH);
+							readInPlace(places, scnr);
 							break;
 						}
-						case "w": { //if user types in "w" or "W", write out places
-							         //to a file
-							fileList(FILE_EXTENSION, DATA_PATH);//list all files with a "mp" 
-							                      //extension in the default directory
-							writePlaces(places, scnr);//write out places to a file
+						case "w": { 
+							//if user types in "w" or "W", first list all files with 
+							//the default "mpl" extension and then write out places 
+							//to a file
+							fileList(FILE_EXTENSION, DATA_PATH);
+							writePlaces(places, scnr);
 							break;
 						}
 						case "c": { //if user types in "c" or "C", let user set the 
@@ -195,7 +197,8 @@ public class MyPlacesApp {
 //		} 
 		finally {
 				scnr.nextLine();
-				enterKeyPressed(scnr);//let users to press enter to complete the action
+				//let users to press enter to complete the action
+				enterKeyPressed(scnr);
 			}
 	}
 	
@@ -234,7 +237,8 @@ public class MyPlacesApp {
 	   	//try to create a FileOutputStream to the file
 			FileOutputStream fileStringStream = new FileOutputStream(filename);
 			PrintWriter output = new PrintWriter(fileStringStream);
-			//print the names and address of each place to the file. Separate them with ";"
+			//print the names and address of each place to the file. 
+			//Separate them with ";"
 			for (int i = 0; i < places.size(); i++) {
 				output.print(places.get(i).getName() + "; ");
 				output.println(places.get(i).getAddress());
@@ -273,19 +277,36 @@ public class MyPlacesApp {
 		try {
 			int numCurrent = scnr.nextInt();
 			Place.setCurrent(places.get(numCurrent - 1));
-			System.out.println(places.get(numCurrent - 1).getName() + " set as Current place.");
+			System.out.println(places.get(numCurrent - 1).getName() + 
+					" set as Current place.");
 		} catch (IndexOutOfBoundsException e) {
-			System.out.printf("Expected a number between %d and %d.\n", 1, places.size());
+			System.out.printf("Expected a number between %d and %d.\n", 
+					1, places.size());
 		} finally {
 			scnr.nextLine();
 			enterKeyPressed(scnr);//let user press enter to complete the action
 		}
 	}
 	
-	public static PlaceList previewList(PlaceList places, Scanner scnr, String file_extension, String data_path) {
-		fileList(file_extension, data_path);//list all files with default extension 
+	/**
+	 * A method to open a file list and preview the places
+	 * @param places: current place list
+	 *TODO: let user choose to add previewed places to current list
+	 * @param scnr: a scanner for user input
+	 * @param file_extension: extension of files to preview
+	 * @param data_path: directory of files to preview
+	 * @return
+	 */
+	public static PlaceList previewList(PlaceList places, Scanner scnr, 
+			String file_extension, String data_path) {
+		//list all files with specified extension and directory
+		fileList(file_extension, data_path);
+		//create a new place list
 		PlaceList newPlaces = new PlaceList();
+		//read in places
 		String filename = readInPlace(newPlaces, scnr);
+		//if new places are read in, display them to user
+		//TODO: add functions for direct operation of new places
 		if(newPlaces.size() > 0) {
 			System.out.println("\nPlaces in " + filename);
 			newPlaces.printPlaces();
@@ -357,11 +378,13 @@ public class MyPlacesApp {
 		String filename = scnr.next(); //let user type in file name
 		scnr.nextLine();
 		System.out.println("Reading file: " + filename);
-		try{	// try to open a fileinputstream with the filename.
+		try(
+				FileInputStream filePlaceStream = new FileInputStream(filename);
+
+				){	// try to open a fileinputstream with the filename.
 			//if the filename is legitimate, parse the text and add to places
-			FileInputStream filePlaceStream = new FileInputStream(filename);
 			parsePlacesToAdd(filePlaceStream, places);//parse text
-			filePlaceStream.close();
+//			filePlaceStream.close();
 		} catch (IOException excpt) { //if the user types in a file name that 
 			                           //does not correspond to any file, 
 			System.out.println("Unable to read from file: " + filename);

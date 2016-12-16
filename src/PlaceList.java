@@ -23,7 +23,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -35,7 +34,8 @@ import java.util.Collections;
 
 public class PlaceList {
 	private ArrayList<Place> places; //The class has an ArrayList of places
-	private boolean isChanged; //whether new places are added to or removed from the lsit
+	private boolean isChanged; //whether new places are added to or removed 
+	//from the list
 	
 	/**
 	 * The constructor initializes the place to a new ArrayList of places
@@ -102,12 +102,14 @@ public class PlaceList {
 	/**
 	 * A method to determine whether a place is contained in the list. 
 	 * @param place: a place that needs to be checked. 
-	 * @return true is the name of the place matches any place already in the list. 
+	 * @return true is the name of the place matches any place already in 
+	 * the list. 
 	 */
 	public boolean contains(Place place) {
 		boolean outcome = false;
 		for (int i = 0; i < places.size(); i++) {
-			if(places.get(i) != null & places.get(i).getName().equals(place.getName())) {
+			if(places.get(i) != null & 
+					places.get(i).getName().equals(place.getName())) {
 				outcome = true;
 				break;
 			} 
@@ -125,26 +127,28 @@ public class PlaceList {
 		//If there is no places in the list, print out "No places in memory". 
 		if(this.size() == 0) {
 			System.out.println("No places in memory.");
-		//Otherwise, print out the names of places alphabetically if Current is not set. 
+		//Otherwise, print out the names of places alphabetically if Current 
+			//is not set. 
 		} else if (Place.getCurrent() == null) {
 			this.sort();
 			for(int i = 0; i < this.size(); i++) {
 				System.out.println((i + 1) + ") " + places.get(i).getName());
 			}
-		//if Current is already set, then print out names and distances to Current 
-		//from closest to the furtherest
+		//if Current is already set, then print out names and distances to 
+		//Current from closest to the furtherest
 		} else{
 			this.sort();
 			for(int i = 0; i < this.size(); i++) {
-				System.out.printf("%d) %s (%.2f miles)\n", i + 1, places.get(i).getName(), 
-						places.get(i).getDistance());
+				System.out.printf("%d) %s (%.2f miles)\n", i + 1, 
+						places.get(i).getName(), places.get(i).getDistance());
 			}
 		}
 		System.out.println("--------------------------");
 	}
 	
 	/**
-	 * A method to sort places in the place list. It relies on the compareTo method in Place class.
+	 * A method to sort places in the place list. It relies on the compareTo 
+	 * method in Place class.
 	 */
 	public void sort() {
 		Collections.sort(places);
